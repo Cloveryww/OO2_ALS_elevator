@@ -51,13 +51,13 @@ public class Scheduler {
 			    return null;
 			}
 		}
-		else//error Õı³£²»¿ÉÄÜ³öÏÖ
+		else//error æ­£å¸¸ä¸å¯èƒ½å‡ºç°
 		{
 			System.out.println("no possible");
 		}    	
 		return req;
 	}
-	public Boolean inputReqs(RequestList reqlist)//»ñÈ¡ÊäÈëµÄÇëÇó£¬Éú³ÉÇëÇó¶ÔÏó
+	public Boolean inputReqs(RequestList reqlist)//è·å–è¾“å…¥çš„è¯·æ±‚ï¼Œç”Ÿæˆè¯·æ±‚å¯¹è±¡
 	{
 		int firstTag=0;
 		Request curreq;
@@ -65,8 +65,8 @@ public class Scheduler {
 		Scanner sc=new Scanner(System.in);  
     	do {
 		String str = sc.nextLine();
-    	String str_no_space = str.replaceAll("\\s+", "");//É¾³ıËùÓĞ¿Õ¸ñ
-    	if(str_no_space.length()==0)//¿ÕĞĞ
+    	String str_no_space = str.replaceAll("\\s+", "");//åˆ é™¤æ‰€æœ‰ç©ºæ ¼
+    	if(str_no_space.length()==0)//ç©ºè¡Œ
     	{
     		errorStr.add(str_no_space);
     		continue;
@@ -88,7 +88,7 @@ public class Scheduler {
     			return true;	
     		}
     	}
-    	//ÏÈ¼ì²éÊÇ·ñÎªºÏ·¨¸ñÊ½µÄÇëÇó
+    	//å…ˆæ£€æŸ¥æ˜¯å¦ä¸ºåˆæ³•æ ¼å¼çš„è¯·æ±‚
     	Pattern p0=Pattern.compile("\\([EF]R,[+]?(\\d+),((UP|DOWN),)?[+]?(\\d+)\\)");
     	Matcher m0=p0.matcher(str_no_space);
     	if(!m0.matches())
@@ -96,37 +96,37 @@ public class Scheduler {
     		errorStr.add(str_no_space);
     		continue;
     	}
-    	curreq = string2Req(str_no_space);//String ×ªReq
-    	if(curreq==null)//²»ºÏ·¨
+    	curreq = string2Req(str_no_space);//String è½¬Req
+    	if(curreq==null)//ä¸åˆæ³•
     	{
     		errorStr.add(str_no_space);
     		continue;
     	}
-    	if(firstTag==0)//µÚÒ»¸öºÏ·¨ÇëÇó»¹Ã»µ½
+    	if(firstTag==0)//ç¬¬ä¸€ä¸ªåˆæ³•è¯·æ±‚è¿˜æ²¡åˆ°
     	{
-    		//ÊÇµÚÒ»¸öºÏ·¨ÊäÈë(FR,1,UP,0)
+    		//æ˜¯ç¬¬ä¸€ä¸ªåˆæ³•è¾“å…¥(FR,1,UP,0)
     		if(curreq.getType()==ReqType.FR&&curreq.getFloorNo()==1&&curreq.getFRdir()==Direction.UP&&curreq.getTime()==0)
     		{
     			firstTag = 1;
     			reqlist.addReq(curreq);
     		}
-    		else//invalid ÊäÈë
+    		else//invalid è¾“å…¥
     		{
     			new Output().invalidoutput(str_no_space);
     		}
     	}
-    	else//µÚÒ»¸öºÍ·¢ÇëÇóÒÑ¾­µ½ÁË
+    	else//ç¬¬ä¸€ä¸ªå’Œå‘è¯·æ±‚å·²ç»åˆ°äº†
     	{
     		reqlist.addReq(curreq);
     	}
     	}while (true);
 	}
 	
-	public void deleteInvalidReqs(RequestList reqlist)//É¾³ıËùÓĞ²»ºÏ·¨µÄÇëÇó£¬²¢Êä³öinvalidĞÅÏ¢
+	public void deleteInvalidReqs(RequestList reqlist)//åˆ é™¤æ‰€æœ‰ä¸åˆæ³•çš„è¯·æ±‚ï¼Œå¹¶è¾“å‡ºinvalidä¿¡æ¯
 	{
 		for(int i = 1 ;i<reqlist.getListlen();i++)
 		{
-			if(reqlist.getReq(i).getTime()<reqlist.getReq(i-1).getTime())//ÊäÈë²»ÊÇ°´Ê±¼äµİÔöµÄ
+			if(reqlist.getReq(i).getTime()<reqlist.getReq(i-1).getTime())//è¾“å…¥ä¸æ˜¯æŒ‰æ—¶é—´é€’å¢çš„
 			{
 				new Output().invalidoutput(reqlist.getReq(i).toString());
 				reqlist.deleteReq(i);
@@ -154,7 +154,7 @@ public class Scheduler {
 		}
 	}
 
-	public void findshaodai(int curFloor,Direction dir, Request mainReq, RequestList e_waitlist)//´ÓµÈ´ı¶ÓÁĞÖĞÕÒµ½µ±Ç°Ö÷ÇëÇó¿ÉÉÔ´ıµÄÇëÇó£¬²¢±ê¼Ç
+	public void findshaodai(int curFloor,Direction dir, Request mainReq, RequestList e_waitlist)//ä»ç­‰å¾…é˜Ÿåˆ—ä¸­æ‰¾åˆ°å½“å‰ä¸»è¯·æ±‚å¯ç¨å¾…çš„è¯·æ±‚ï¼Œå¹¶æ ‡è®°
 	{
 		for(int i =0;i<e_waitlist.getListlen();i++)
 		{
@@ -164,7 +164,7 @@ public class Scheduler {
 		{
 			for(int i =0;i<e_waitlist.getListlen();i++)
 			{
-				//¿ÉÉÔ´ı
+				//å¯ç¨å¾…
 				if(e_waitlist.getReq(i)==mainReq)
 				{
 					continue;
@@ -181,7 +181,7 @@ public class Scheduler {
 		{
 			for(int i =0;i<e_waitlist.getListlen();i++)
 			{
-				//¿ÉÉÔ´ı
+				//å¯ç¨å¾…
 				if(e_waitlist.getReq(i)==mainReq)
 				{
 					continue;
@@ -195,7 +195,7 @@ public class Scheduler {
 			}
 		}
 	}
- 	public Boolean isSame(Request req, Elevator elevator)//Èç¹û²»same£¬Ôò°´ÏÂÏàÓ¦°´Å¥£¬·µ»Øfalse£¬Èç¹ûsame£¬Ôò·µ»Øtrue
+ 	public Boolean isSame(Request req, Elevator elevator)//å¦‚æœä¸sameï¼Œåˆ™æŒ‰ä¸‹ç›¸åº”æŒ‰é’®ï¼Œè¿”å›falseï¼Œå¦‚æœsameï¼Œåˆ™è¿”å›true
 	{
 		if(req.getType()==ReqType.FR)
 		{
@@ -235,11 +235,11 @@ public class Scheduler {
 			}
 		}
 	}
-	public Boolean cancelButton(Request req,Elevator ele)//Ï¨ÃğÇëÇóËù°´°´Å¥
+	public Boolean cancelButton(Request req,Elevator ele)//ç†„ç­è¯·æ±‚æ‰€æŒ‰æŒ‰é’®
 	{
 		if(req.getType()==ReqType.ER)
 		{
-			if(ele.popButton(req.getFloorNo()-1))//cancel³É¹¦
+			if(ele.popButton(req.getFloorNo()-1))//cancelæˆåŠŸ
 			{
 				return true;
 			}
@@ -277,15 +277,15 @@ public class Scheduler {
 	}
  	public void update_waitlist(Elevator elevator,RequestList reqlist, RequestList e_waitlist)
 	{
-		if((reqlist.getNextindex()==reqlist.getListlen())&&(e_waitlist.getListlen()==0))//È«²¿ÇëÇóÒÑ¾­¶ÁÈë²¢ÇÒµÈ´ı¶ÓÁĞÎª¿Õ£¬ËµÃ÷³ÌĞò½áÊøÁË
+		if((reqlist.getNextindex()==reqlist.getListlen())&&(e_waitlist.getListlen()==0))//å…¨éƒ¨è¯·æ±‚å·²ç»è¯»å…¥å¹¶ä¸”ç­‰å¾…é˜Ÿåˆ—ä¸ºç©ºï¼Œè¯´æ˜ç¨‹åºç»“æŸäº†
 		{
-			System.exit(0);//³ÌĞò½áÊø£¡£¡
+			System.exit(0);//ç¨‹åºç»“æŸï¼ï¼
 		}
 		for(int i =reqlist.getNextindex();i<reqlist.getListlen();i++)
 		{
 			if(reqlist.getReq(i).getTime()<=elevator.getE_time())
 			{
-				if(isSame(reqlist.getReq(i),elevator))//ÊÇÍ¬ÖÊÇëÇó
+				if(isSame(reqlist.getReq(i),elevator))//æ˜¯åŒè´¨è¯·æ±‚
 				{
 					new Output().sameoutput(reqlist.getReq(i));
 					reqlist.deleteReq(i);
@@ -303,24 +303,24 @@ public class Scheduler {
 	}
 	public void ALS_schedul(Elevator elevator, RequestList reqlist)
 	{
-		RequestList e_waitlist = new RequestList();//ÒÑ¾­·¢Éúµ«Î´ÏìÓ¦µÄÇëÇóÁĞ±í£¬×¨ÊôÄ³¸öµçÌİ
-		Request mainReq;//µ±Ç°Ö÷ÇëÇó
-		//¸üĞÂe_waitlist,²¢É¾È¥sameÇëÇó
+		RequestList e_waitlist = new RequestList();//å·²ç»å‘ç”Ÿä½†æœªå“åº”çš„è¯·æ±‚åˆ—è¡¨ï¼Œä¸“å±æŸä¸ªç”µæ¢¯
+		Request mainReq;//å½“å‰ä¸»è¯·æ±‚
+		//æ›´æ–°e_waitlist,å¹¶åˆ å»sameè¯·æ±‚
 		update_waitlist(elevator, reqlist,  e_waitlist);
-		mainReq= e_waitlist.getReq(0);//¿ÉÓĞ¿ÉÎŞ
+		mainReq= e_waitlist.getReq(0);//å¯æœ‰å¯æ— 
 		while(true)
 		{
-			//ÏìÓ¦ÄÜ¹»ÏìÓ¦µÄÇëÇó
+			//å“åº”èƒ½å¤Ÿå“åº”çš„è¯·æ±‚
 			if(elevator.getState()==ElevatorState.UP)
 			{
-				if(elevator.getCurfloor()<mainReq.getFloorNo())//»¹Ã»µ½´ïÖ÷ÇëÇóÄ¿µÄÂ¥²ã
+				if(elevator.getCurfloor()<mainReq.getFloorNo())//è¿˜æ²¡åˆ°è¾¾ä¸»è¯·æ±‚ç›®çš„æ¥¼å±‚
 				{
-					//ÅĞ¶Ïµ±Ç°²ãÓĞÃ»ÓĞ¿ÉÉÔ´ıÇëÇóĞèÒªÏìÓ¦
+					//åˆ¤æ–­å½“å‰å±‚æœ‰æ²¡æœ‰å¯ç¨å¾…è¯·æ±‚éœ€è¦å“åº”
 					int firsttag=1;
 					for(int i=0;i<e_waitlist.getListlen();i++)
 					{
 						if(e_waitlist.getReq(i).getStatus()==1&&
-								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//ÓĞÉÓ´øÇëÇó¿ÉÒÔÏìÓ¦
+								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//æœ‰æå¸¦è¯·æ±‚å¯ä»¥å“åº”
 						{
 							if(firsttag==1)
 							{
@@ -329,7 +329,7 @@ public class Scheduler {
 								update_waitlist(elevator, reqlist,  e_waitlist);
 							}
 							new Output().output(e_waitlist.getReq(i), elevator.getCurfloor(), ElevatorState.UP, elevator.getE_time()-1);
-							if(!cancelButton(e_waitlist.getReq(i),elevator))//ÃğÁËÉÓ´øÇëÇó²úÉúµÄ°´Å¥
+							if(!cancelButton(e_waitlist.getReq(i),elevator))//ç­äº†æå¸¦è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®
 							{
 								System.out.println("error6");
 							}
@@ -342,26 +342,26 @@ public class Scheduler {
 					elevator.goUp(1);
 					update_waitlist(elevator, reqlist,  e_waitlist);
 				}
-				else if(mainReq.getFloorNo()==elevator.getCurfloor())//µ½´ïÖ÷ÇëÇóÄ¿µÄÂ¥²ã
+				else if(mainReq.getFloorNo()==elevator.getCurfloor())//åˆ°è¾¾ä¸»è¯·æ±‚ç›®çš„æ¥¼å±‚
 				{
 					elevator.goOpenClose();
 					update_waitlist(elevator, reqlist,  e_waitlist);
 					new Output().output(mainReq, elevator.getCurfloor(), ElevatorState.UP,elevator.getE_time()-1 );
-					//Ö÷ÇëÇóÒÑÏìÓ¦
-					if(!cancelButton(mainReq,elevator))//ÃğÁËÖ÷ÇëÇó²úÉúµÄ°´Å¥  ???ÎªÁË½â¾öÍ¬ÖÊÎÊÌâºóÒÆÃğµÆ£¬¿ÉÄÜÓĞ´í
+					//ä¸»è¯·æ±‚å·²å“åº”
+					if(!cancelButton(mainReq,elevator))//ç­äº†ä¸»è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®  ???ä¸ºäº†è§£å†³åŒè´¨é—®é¢˜åç§»ç­ç¯ï¼Œå¯èƒ½æœ‰é”™
 					{
 						System.out.println("error6");
 					}
 					e_waitlist.deleteReq(mainReq);
 					//reqlist.deleteReq(mainReq);
-					//¿´¿´ÓĞÃ»ÓĞÍ¬²ãÏìÓ¦µÄÉÓ´øÇëÇó
+					//çœ‹çœ‹æœ‰æ²¡æœ‰åŒå±‚å“åº”çš„æå¸¦è¯·æ±‚
 					for(int i=0;i<e_waitlist.getListlen();i++)
 					{
 						if(e_waitlist.getReq(i).getStatus()==1&&
-								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//ÓĞÉÓ´øÇëÇó¿ÉÒÔÏìÓ¦
+								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//æœ‰æå¸¦è¯·æ±‚å¯ä»¥å“åº”
 						{
 							new Output().output(e_waitlist.getReq(i), elevator.getCurfloor(), ElevatorState.UP, elevator.getE_time()-1);
-							if(!cancelButton(e_waitlist.getReq(i),elevator))//ÃğÁËÉÓ´øÇëÇó²úÉúµÄ°´Å¥
+							if(!cancelButton(e_waitlist.getReq(i),elevator))//ç­äº†æå¸¦è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®
 							{
 								System.out.println("error6");
 							}
@@ -370,11 +370,11 @@ public class Scheduler {
 							i--;
 						}
 					}
-					//¾ÉµÄÖ÷ÇëÇóÒÑÏìÓ¦Íê±Ï£¬Ñ¡ÔñĞÂµÄÖ÷ÇëÇó
+					//æ—§çš„ä¸»è¯·æ±‚å·²å“åº”å®Œæ¯•ï¼Œé€‰æ‹©æ–°çš„ä¸»è¯·æ±‚
 					int hit=0;
-					for(int i=0;i<e_waitlist.getListlen();i++)//¿´¿´»¹ÓĞÃ»ÓĞ¾ÉÖ÷ÇëÇóµÄÎ´Íê³ÉÉÓ´øÇëÇó
+					for(int i=0;i<e_waitlist.getListlen();i++)//çœ‹çœ‹è¿˜æœ‰æ²¡æœ‰æ—§ä¸»è¯·æ±‚çš„æœªå®Œæˆæå¸¦è¯·æ±‚
 					{
-						if(e_waitlist.getReq(i).getStatus()==1)//ÓĞÉÓ´øÇëÇó¿ÉÒÔÏìÓ¦
+						if(e_waitlist.getReq(i).getStatus()==1)//æœ‰æå¸¦è¯·æ±‚å¯ä»¥å“åº”
 						{
 							hit = 1;
 							mainReq = e_waitlist.getReq(i);
@@ -388,21 +388,21 @@ public class Scheduler {
 						update_waitlist(elevator, reqlist,  e_waitlist);
 						continue;
 					}
-					if(hit==0)//Ã»ÓĞ¾ÉÖ÷ÇëÇóµÄÎ´Íê³ÉÉÓ´øÇëÇó£¬ÔòÑ¡ÔñµÈ´ı¶ÓÁĞÖĞµÄµÚÒ»¸öÇëÇó
+					if(hit==0)//æ²¡æœ‰æ—§ä¸»è¯·æ±‚çš„æœªå®Œæˆæå¸¦è¯·æ±‚ï¼Œåˆ™é€‰æ‹©ç­‰å¾…é˜Ÿåˆ—ä¸­çš„ç¬¬ä¸€ä¸ªè¯·æ±‚
 					{
-						if(e_waitlist.getListlen()==0)//µÈ´ı¶ÓÁĞÒ²Îª¿Õ£¬ÔòµçÌİ½øÈëwfs×´Ì¬
+						if(e_waitlist.getListlen()==0)//ç­‰å¾…é˜Ÿåˆ—ä¹Ÿä¸ºç©ºï¼Œåˆ™ç”µæ¢¯è¿›å…¥wfsçŠ¶æ€
 						{
 							elevator.gowait(0.5);
 							update_waitlist(elevator, reqlist,  e_waitlist);
 							continue;
-						}else//µÈ´ı¶ÓÁĞ²»Îª¿Õ
+						}else//ç­‰å¾…é˜Ÿåˆ—ä¸ä¸ºç©º
 						{
 							mainReq = e_waitlist.getReq(0);
-							elevator.setState(ElevatorState.STILL);//ÉèÖÃµçÌİ×´Ì¬Îª¾²Ö¹£¬½»¸øSTILL·ÖÖ§´¦Àí
+							elevator.setState(ElevatorState.STILL);//è®¾ç½®ç”µæ¢¯çŠ¶æ€ä¸ºé™æ­¢ï¼Œäº¤ç»™STILLåˆ†æ”¯å¤„ç†
 							continue;
 						}
 					}
-					System.out.println("error7");//²»¿ÉÄÜµ½ÕâÀï
+					System.out.println("error7");//ä¸å¯èƒ½åˆ°è¿™é‡Œ
 				}
 				else
 				{
@@ -411,14 +411,14 @@ public class Scheduler {
 			}
 			else if(elevator.getState()==ElevatorState.DOWN)
 			{
-				if(mainReq.getFloorNo()<elevator.getCurfloor())//»¹Ã»µ½´ïÖ÷ÇëÇóÄ¿µÄÂ¥²ã
+				if(mainReq.getFloorNo()<elevator.getCurfloor())//è¿˜æ²¡åˆ°è¾¾ä¸»è¯·æ±‚ç›®çš„æ¥¼å±‚
 				{
-					//ÅĞ¶Ïµ±Ç°²ãÓĞÃ»ÓĞ¿ÉÉÔ´ıÇëÇóĞèÒªÏìÓ¦
+					//åˆ¤æ–­å½“å‰å±‚æœ‰æ²¡æœ‰å¯ç¨å¾…è¯·æ±‚éœ€è¦å“åº”
 					int firsttag=1;
 					for(int i=0;i<e_waitlist.getListlen();i++)
 					{
 						if(e_waitlist.getReq(i).getStatus()==1&&
-								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//ÓĞÉÓ´øÇëÇó¿ÉÒÔÏìÓ¦
+								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//æœ‰æå¸¦è¯·æ±‚å¯ä»¥å“åº”
 						{
 							if(firsttag==1)
 							{
@@ -426,8 +426,8 @@ public class Scheduler {
 								elevator.goOpenClose();
 								update_waitlist(elevator, reqlist,  e_waitlist);
 							}
-							new Output().output(e_waitlist.getReq(i), elevator.getCurfloor(), ElevatorState.DOWN, elevator.getE_time());
-							if(!cancelButton(e_waitlist.getReq(i),elevator))//ÃğÁËÉÓ´øÇëÇó²úÉúµÄ°´Å¥
+							new Output().output(e_waitlist.getReq(i), elevator.getCurfloor(), ElevatorState.DOWN, elevator.getE_time()-1);
+							if(!cancelButton(e_waitlist.getReq(i),elevator))//ç­äº†æå¸¦è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®
 							{
 								System.out.println("error6");
 							}
@@ -440,26 +440,26 @@ public class Scheduler {
 					elevator.goDown(1);
 					update_waitlist(elevator, reqlist,  e_waitlist);
 				}
-				else if(mainReq.getFloorNo()==elevator.getCurfloor())//µ½´ïÖ÷ÇëÇóÄ¿µÄÂ¥²ã
+				else if(mainReq.getFloorNo()==elevator.getCurfloor())//åˆ°è¾¾ä¸»è¯·æ±‚ç›®çš„æ¥¼å±‚
 				{
 					elevator.goOpenClose();
 					update_waitlist(elevator, reqlist,  e_waitlist);
 					new Output().output(mainReq, elevator.getCurfloor(), ElevatorState.DOWN,elevator.getE_time()-1);
-					//Ö÷ÇëÇóÒÑÏìÓ¦
-					if(!cancelButton(mainReq,elevator))//ÃğÁËÖ÷ÇëÇó²úÉúµÄ°´Å¥  ???ÎªÁË½â¾öÍ¬ÖÊÎÊÌâºóÒÆÃğµÆ£¬¿ÉÄÜÓĞ´í
+					//ä¸»è¯·æ±‚å·²å“åº”
+					if(!cancelButton(mainReq,elevator))//ç­äº†ä¸»è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®  ???ä¸ºäº†è§£å†³åŒè´¨é—®é¢˜åç§»ç­ç¯ï¼Œå¯èƒ½æœ‰é”™
 					{
 						System.out.println("error6");
 					}
 					e_waitlist.deleteReq(mainReq);
 					//reqlist.deleteReq(mainReq);
-					//¿´¿´ÓĞÃ»ÓĞÍ¬²ãÏìÓ¦µÄÉÓ´øÇëÇó
+					//çœ‹çœ‹æœ‰æ²¡æœ‰åŒå±‚å“åº”çš„æå¸¦è¯·æ±‚
 					for(int i=0;i<e_waitlist.getListlen();i++)
 					{
 						if(e_waitlist.getReq(i).getStatus()==1&&
-								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//ÓĞÉÓ´øÇëÇó¿ÉÒÔÏìÓ¦
+								e_waitlist.getReq(i).getFloorNo()==elevator.getCurfloor())//æœ‰æå¸¦è¯·æ±‚å¯ä»¥å“åº”
 						{
 							new Output().output(e_waitlist.getReq(i), elevator.getCurfloor(), ElevatorState.DOWN, elevator.getE_time()-1);
-							if(!cancelButton(e_waitlist.getReq(i),elevator))//ÃğÁËÉÓ´øÇëÇó²úÉúµÄ°´Å¥
+							if(!cancelButton(e_waitlist.getReq(i),elevator))//ç­äº†æå¸¦è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®
 							{
 								System.out.println("error6");
 							}
@@ -468,11 +468,11 @@ public class Scheduler {
 							i--;
 						}
 					}
-					//¾ÉµÄÖ÷ÇëÇóÒÑÏìÓ¦Íê±Ï£¬Ñ¡ÔñĞÂµÄÖ÷ÇëÇó
+					//æ—§çš„ä¸»è¯·æ±‚å·²å“åº”å®Œæ¯•ï¼Œé€‰æ‹©æ–°çš„ä¸»è¯·æ±‚
 					int hit=0;
-					for(int i=0;i<e_waitlist.getListlen();i++)//¿´¿´»¹ÓĞÃ»ÓĞ¾ÉÖ÷ÇëÇóµÄÎ´Íê³ÉÉÓ´øÇëÇó
+					for(int i=0;i<e_waitlist.getListlen();i++)//çœ‹çœ‹è¿˜æœ‰æ²¡æœ‰æ—§ä¸»è¯·æ±‚çš„æœªå®Œæˆæå¸¦è¯·æ±‚
 					{
-						if(e_waitlist.getReq(i).getStatus()==1)//ÓĞÉÓ´øÇëÇó¿ÉÒÔÏìÓ¦
+						if(e_waitlist.getReq(i).getStatus()==1)//æœ‰æå¸¦è¯·æ±‚å¯ä»¥å“åº”
 						{
 							hit = 1;
 							mainReq = e_waitlist.getReq(i);
@@ -486,22 +486,22 @@ public class Scheduler {
 						update_waitlist(elevator, reqlist,  e_waitlist);
 						continue;
 					}
-					if(hit==0)//Ã»ÓĞ¾ÉÖ÷ÇëÇóµÄÎ´Íê³ÉÉÓ´øÇëÇó£¬ÔòÑ¡ÔñµÈ´ı¶ÓÁĞÖĞµÄµÚÒ»¸öÇëÇó
+					if(hit==0)//æ²¡æœ‰æ—§ä¸»è¯·æ±‚çš„æœªå®Œæˆæå¸¦è¯·æ±‚ï¼Œåˆ™é€‰æ‹©ç­‰å¾…é˜Ÿåˆ—ä¸­çš„ç¬¬ä¸€ä¸ªè¯·æ±‚
 					{
-						if(e_waitlist.getListlen()==0)//µÈ´ı¶ÓÁĞÒ²Îª¿Õ£¬ÔòµçÌİ½øÈëwfs×´Ì¬
+						if(e_waitlist.getListlen()==0)//ç­‰å¾…é˜Ÿåˆ—ä¹Ÿä¸ºç©ºï¼Œåˆ™ç”µæ¢¯è¿›å…¥wfsçŠ¶æ€
 						{
 							mainReq = null;
 							elevator.gowait(0.5);
 							update_waitlist(elevator, reqlist,  e_waitlist);
 							continue;
-						}else//µÈ´ı¶ÓÁĞ²»Îª¿Õ
+						}else//ç­‰å¾…é˜Ÿåˆ—ä¸ä¸ºç©º
 						{
 							mainReq = e_waitlist.getReq(0);
-							elevator.setState(ElevatorState.STILL);//ÉèÖÃµçÌİ×´Ì¬Îª¾²Ö¹£¬½»¸øSTILL·ÖÖ§´¦Àí
+							elevator.setState(ElevatorState.STILL);//è®¾ç½®ç”µæ¢¯çŠ¶æ€ä¸ºé™æ­¢ï¼Œäº¤ç»™STILLåˆ†æ”¯å¤„ç†
 							continue;
 						}
 					}
-					System.out.println("error7");//²»¿ÉÄÜµ½ÕâÀï
+					System.out.println("error7");//ä¸å¯èƒ½åˆ°è¿™é‡Œ
 				}
 				else
 				{
@@ -512,19 +512,19 @@ public class Scheduler {
 				if(e_waitlist.getListlen()>0)
 				{
 					mainReq = e_waitlist.getReq(0);
-					if(mainReq.getFloorNo()==elevator.getCurfloor())//Í¬²ãÇëÇó
+					if(mainReq.getFloorNo()==elevator.getCurfloor())//åŒå±‚è¯·æ±‚
 					{
 						elevator.goOpenClose();
-						new Output().output(mainReq, elevator.getCurfloor(), ElevatorState.STILL,elevator.getE_time() );
-						//Ö÷ÇëÇóÒÑÏìÓ¦
+						new Output().output(mainReq, elevator.getCurfloor(), ElevatorState.STILL,elevator.getE_time());
+						//ä¸»è¯·æ±‚å·²å“åº”
 						e_waitlist.deleteReq(mainReq);
 						//reqlist.deleteReq(mainReq);
 						update_waitlist(elevator, reqlist,  e_waitlist);
-						if(!cancelButton(mainReq,elevator))//ÃğÁËÖ÷ÇëÇó²úÉúµÄ°´Å¥
+						if(!cancelButton(mainReq,elevator))//ç­äº†ä¸»è¯·æ±‚äº§ç”Ÿçš„æŒ‰é’®
 						{
 							System.out.println("error6");
 						}
-						do {//ÕÒµ½ÏÂÒ»¸ömainreq
+						do {//æ‰¾åˆ°ä¸‹ä¸€ä¸ªmainreq
 							if(e_waitlist.getListlen()>0)
 							{
 								mainReq = e_waitlist.getReq(0);
@@ -537,7 +537,7 @@ public class Scheduler {
 							}
 						}while(true);
 					}
-					else if(mainReq.getFloorNo()>elevator.getCurfloor())//ÏòÉÏ
+					else if(mainReq.getFloorNo()>elevator.getCurfloor())//å‘ä¸Š
 					{
 						findshaodai(elevator.getCurfloor(), Direction.UP, mainReq, e_waitlist);
 						elevator.goUp(1);
@@ -549,7 +549,7 @@ public class Scheduler {
 						elevator.goDown(1);
 						update_waitlist(elevator, reqlist,  e_waitlist);
 					}
-				}else//µÈ´ıÇëÇóÎª¿Õ£¬¼ÌĞøWFS
+				}else//ç­‰å¾…è¯·æ±‚ä¸ºç©ºï¼Œç»§ç»­WFS
 				{
 					//System.out.println("error4");
 					elevator.gowait(0.5);
@@ -557,24 +557,24 @@ public class Scheduler {
 				}
 				
 			}
-		}//´óÑ­»·
+		}//å¤§å¾ªç¯
 	}
 	
 	public static void main(String[] args) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO è‡ªåŠ¨ç”Ÿæˆçš„æ–¹æ³•å­˜æ ¹
 		Boolean ret;
 		Scheduler scheduler = new Scheduler();
 		RequestList reqlist = new RequestList();
 		Elevator elevator = new Elevator();
-		ret = scheduler.inputReqs(reqlist);//¶ÁÈëËùÓĞÇëÇó£¨³ıÁË×îÇ°ÃæµÄinvalidÇëÇó£©
+		ret = scheduler.inputReqs(reqlist);//è¯»å…¥æ‰€æœ‰è¯·æ±‚ï¼ˆé™¤äº†æœ€å‰é¢çš„invalidè¯·æ±‚ï¼‰
 		if(!ret)
 		{
 			return ;
 		}
-		scheduler.deleteInvalidReqs(reqlist);//É¾³ıinvalidÇëÇó
-		//¿ªÊ¼µ÷¶È
+		scheduler.deleteInvalidReqs(reqlist);//åˆ é™¤invalidè¯·æ±‚
+		//å¼€å§‹è°ƒåº¦
 		scheduler.ALS_schedul(elevator, reqlist);
-		//µ÷¶È½áÊø
+		//è°ƒåº¦ç»“æŸ
 		return;
 	}
 }
